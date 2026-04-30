@@ -16,8 +16,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, xml, ctype, iconv
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, curl
+
+      - name: Create .env file
+        run: |
+          echo "APP_ENV=test" > backend/.env
+          echo "APP_SECRET=$(php -r 'echo bin2hex(random_bytes(16));')" >> backend/.env
 
       - name: Install dependencies
         run: composer install --working-dir=backend
