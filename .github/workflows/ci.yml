@@ -23,6 +23,7 @@ jobs:
         run: |
           echo "APP_ENV=test" > backend/.env
           echo "APP_SECRET=$(php -r 'echo bin2hex(random_bytes(16));')" >> backend/.env
+          echo "DEFAULT_URI=http://localhost" >> backend/.env
 
       - name: Install dependencies
         run: composer install --working-dir=backend
