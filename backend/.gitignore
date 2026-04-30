@@ -1,0 +1,29 @@
+cat > ~/NeoBudget/backend/.gitignore << 'EOF'
+###> Symfony ###
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/.env.dev
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+/compose.override.yaml
+###< Symfony ###
+
+###> IDE ###
+.idea/
+*.swp
+*.swo
+###< IDE ###
+
+###> Logs ###
+*.log
+###< Logs ###
+
+###> Tests ###
+/coverage/
+/.phpunit.cache/
+###< Tests ###
+EOF
