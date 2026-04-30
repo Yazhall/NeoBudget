@@ -1,43 +1,44 @@
-name: CI
 
-on:
-  push:
-    branches: [develop, main]
-  pull_request:
-    branches: [develop, main]
+  name: CI
 
-jobs:
-  backend:
-    name: Backend (Symfony)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  on:
+    push:
+      branches: [develop, main]
+    pull_request:
+      branches: [develop, main]
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, xml, ctype, iconv
+  jobs:
+    backend:
+      name: Backend (Symfony)
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: composer install --working-dir=backend
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: '8.4'
+            extensions: mbstring, xml, ctype, iconv, curl
 
-      - name: Run tests
-        run: cd backend && php bin/phpunit
+        - name: Install dependencies
+          run: composer install --working-dir=backend
 
-  frontend:
-    name: Frontend (Vue.js)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+        - name: Run tests
+          run: cd backend && php bin/phpunit
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    frontend:
+      name: Frontend (Vue.js)
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: cd frontend && npm install
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
 
-      - name: Run tests
-        run: cd frontend && npm run test:unit
+        - name: Install dependencies
+          run: cd frontend && npm install
+
+        - name: Run tests
+          run: cd frontend && npm run test:unit
