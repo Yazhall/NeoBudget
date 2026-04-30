@@ -1,44 +1,48 @@
+name: CI
 
-  name: CI
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
 
-  on:
-    push:
-      branches: [develop, main]
-    pull_request:
-      branches: [develop, main]
+jobs:
+  backend:
+    name: Backend (Symfony)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-  jobs:
-    backend:
-      name: Backend (Symfony)
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, curl
 
-        - name: Setup PHP
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: '8.4'
-            extensions: mbstring, xml, ctype, iconv, curl
+      - name: Create .env file
+        run: |
+          echo "APP_ENV=test" > backend/.env
+          echo "APP_SECRET=$(php -r 'echo bin2hex(random_bytes(16));')" >> backend/.env
 
-        - name: Install dependencies
-          run: composer install --working-dir=backend
+      - name: Install dependencies
+        run: composer install --working-dir=backend
 
-        - name: Run tests
-          run: cd backend && php bin/phpunit
+      - name: Run tests
+        run: cd backend && php bin/phpunit
 
-    frontend:
-      name: Frontend (Vue.js)
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
+  frontend:
+    name: Frontend (Vue.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-        - name: Install dependencies
-          run: cd frontend && npm install
+      - name: Install dependencies
+        run: cd frontend && npm install
 
-        - name: Run tests
-          run: cd frontend && npm run test:unit
+      - name: Run tests
+        run: cd frontend && npm run test:unit
