@@ -28,8 +28,11 @@ jobs:
       - name: Install dependencies
         run: composer install --working-dir=backend
 
+      - name: Install PHPUnit
+        run: cd backend && composer require --dev phpunit/phpunit
+
       - name: Run tests
-        run: cd backend && php bin/phpunit
+        run: cd backend && ./vendor/bin/phpunit
 
   frontend:
     name: Frontend (Vue.js)
